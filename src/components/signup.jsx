@@ -32,8 +32,13 @@ const SignUp = () => {
       }
 
     }catch(error){
+      console.warn(error.response.data)
       if(error.response.data.error){
         setErrorMessage(error.response.data.error)
+      }else{
+        const errorMessage = error.response.data.reduce((current,data) => {return data.error +" + "+ current } , " ");
+        console.log(errorMessage)
+        setErrorMessage(errorMessage);
       }
     }
   };
