@@ -9,12 +9,15 @@ const Dashboard = () => {
   const userId = localStorage.getItem("userId");
   const role = localStorage.getItem("role");
 
+    const server__uri = import.meta.env.VITE_SERVER_COMMON_URI;
+
+
   useEffect(() => {
     const fetchData = async () => {
       try{
       if (role === "ADMIN") {
         const response = await axios.get(
-          "http://localhost:8080/kitchensink/rest/members",
+          `${server__uri}/members`,
           {
             headers: {
               Authorization: `Bearer ${jwtToken}`,
@@ -24,7 +27,7 @@ const Dashboard = () => {
         setData(response.data);
       } else {
         const response = await axios.get(
-          `http://localhost:8080/kitchensink/rest/members/${userId}`,
+          `${server__uri}/members/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${jwtToken}`,
@@ -46,7 +49,7 @@ const Dashboard = () => {
       <h2>Dashboard</h2>
       <div className="card-container">
         {data.map((user) => (
-          <div key={user.name} className="cards">
+          <div key={user.id} className="cards">
             <p>Name: {user.name}</p>
             <p>Email: {user.email}</p>
             <p>PhoneNo. : {user.phoneNumber}</p>
