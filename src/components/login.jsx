@@ -3,7 +3,7 @@ import { useNavigate ,Link } from "react-router-dom";
 import axios from "axios";
 import "../css/formCss.css"
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [errorMessage , setErrorMessage] = useState("")
@@ -12,12 +12,13 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log(email , password)
     try{
-      const userAndPassword = {
-        name : username,
+      const emailAndPassword = {
+        email : email,
         password: password
       }
-      const response = await axios.post(`${server__uri}/auth/login` , userAndPassword);
+      const response = await axios.post(`${server__uri}/auth/login` , emailAndPassword);
       const data = response.data;
       if(response.status == 200){
         localStorage.setItem("token", data.jwt);
@@ -32,7 +33,10 @@ const Login = () => {
 
     }catch(error){
       if(error.response.data.error){
-        setErrorMessage(error.response.data.error);
+        setErrorMessage(error.response.data.error)
+      }else{
+        const errorMessage = error.response.data.reduce((current,data) => {return data.error +" + "+ current } , " ");
+        setErrorMessage(errorMessage);
       }
     }
   };
@@ -42,10 +46,10 @@ const Login = () => {
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <input
-          type="username"
-          placeholder="Enter UserName"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          type="email"
+          placeholder="Enter User Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input type="password"
