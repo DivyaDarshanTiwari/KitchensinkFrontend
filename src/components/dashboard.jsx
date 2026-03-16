@@ -268,9 +268,10 @@ const Dashboard = () => {
 
   const logout = async () => {
     try {
-      const response = await axios.post(`${server__uri}/auth/logout`, {
+      const response = await axios.get(`${server__uri}/auth/logout`, {
         headers: {
           Authorization: `Bearer ${jwtToken}`,
+          "Content-Type": "application/json"
         },
       });
       if (response) {
